@@ -1,10 +1,9 @@
 const PrintPayslip = () => {
     return (
         <div>
-            PrintPayslip
+            Print Payslip
         </div>
     );
-}
+};
 
 export default PrintPayslip;
-
