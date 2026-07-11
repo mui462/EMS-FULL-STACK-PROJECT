@@ -1,7 +1,8 @@
 const loginLanding = () => {
     return (
-        <div>
-            loginLanding
+        <div className="min-h-screen flex flex-col md:flex-row">
+        <loginLandingLeftside />
+            
         </div>
     );
 }
