@@ -1,10 +1,10 @@
-const Attendence = () => {
+const  attendence = () => {
     return (
         <div>
-            Attendence
+            attendence
         </div>
     );
 }
 
-export default Attendence;
+export default attendence;
 

@@ -1,10 +1,10 @@
-const Leave = () => {
+const leave = () => {
     return (
         <div>
-            Leave
+            leave
         </div>
     );
 }
 
-export default Leave;
+export default leave;
 

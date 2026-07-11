@@ -10,6 +10,7 @@ import Leave from "./pages/leave";
 import Payslips from "./pages/payslips";
 import Settings from "./pages/settings";
 import PrintPayslips from "./pages/printpayslip";
+import LoginForm from "./components/LoginForm";
 
 const App = () => {
   return (
@@ -18,6 +19,12 @@ const App = () => {
 
       <Routes>
         <Route path="/login" element={<LoginLanding />} />
+
+
+        <Route path="/login/admin" element={<LoginForm role="admin" title="Admin portal" subtitle="sign in to manage the organization" />} />
+        <Route path="/login/employee" element={<LoginForm role="employee" title="Employee portal" subtitle="sign in to access your employee dashboard" />} />
+
+
 
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -33,7 +40,14 @@ const App = () => {
           element={<PrintPayslips />}
         />
 
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route
+          path="*"
+          element={
+            <h1 style={{ color: "red", fontSize: "40px" }}>
+              404 - Route Not Found
+            </h1>
+          }
+        />
       </Routes>
     </>
   );

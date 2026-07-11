@@ -1,10 +1,10 @@
-const LoginLanding = () => {
+const loginLanding = () => {
     return (
         <div>
-            LoginLanding
+            loginLanding
         </div>
     );
 }
 
-export default LoginLanding;
+export default loginLanding;
 
