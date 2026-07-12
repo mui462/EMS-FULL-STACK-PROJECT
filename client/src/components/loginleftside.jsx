@@ -1,23 +1,21 @@
 const LoginLeftSide = () => {
-    return (
-        <div className="hidden md:flex w-1/2 bg-indigo-950 overflow-hidden border-r border-slate-200">
+  return (
+    <div className="hidden md:flex w-1/2 bg-indigo-950 overflow-hidden border-r border-slate-200">
+      <div className="absolute -top-30 -left-30 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl"></div>
 
-            <div className="absolute -top-30 -left-30 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl"></div>
+      <div className="relative z-10 flex flex-col justify-center items-start p-12 w-full h-full lg:p-20">
+        <h1 className="text-4xl lg:text-5xl font-medium text-white mb-6 leading-tight tracking-tight">
+          Employee <br />
+          Management System
+        </h1>
 
-            <div className="relative z-10 flex flex-col justify-center items-start p-12 w-full h-full lg:p-20">
-                <h1 className="text-4xl lg:text-5xl font-medium text-white mb-6 leading-tight tracking-tight">
-                    Employee <br />
-                    Management System
-                </h1>
-
-                <p className="text-slate-400 text-lg max-w-md leading-relaxed">
-                    Streamline your workforce operations, track attendance,
-                    manage payroll, and empower your team strongly.
-                </p>
-            </div>
-
-        </div>
-    );
+        <p className="text-slate-400 text-lg max-w-md leading-relaxed">
+          Streamline your workforce operations, track attendance,
+          manage payroll, and empower your team strongly.
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default LoginLeftSide;
