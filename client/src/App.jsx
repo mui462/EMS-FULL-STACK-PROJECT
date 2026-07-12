@@ -18,6 +18,7 @@ const App = () => {
       <Toaster />
 
       <Routes>
+       
         <Route path="/login" element={<LoginLanding />} />
 
 
