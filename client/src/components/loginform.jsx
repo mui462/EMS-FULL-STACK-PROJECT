@@ -12,9 +12,31 @@ const LoginForm = ({ role, title, subtitle }) => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+        setLoading(true);
+        setError("");
+
+        // TODO: Replace this with your authentication API call
+        const user = {
+            firstName: "John",
+            lastName: "Doe",
+            role: email === "admin@example.com" ? "ADMIN" : "EMPLOYEE",
+        };
+
+        // Save authenticated user
+        localStorage.setItem("user", JSON.stringify(user));
+
+        // Navigate after successful login
+        navigate("/dashboard");
+    } catch (err) {
+        setError("Invalid email or password.");
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="min-h-screen flex flex-col md:flex-row">
