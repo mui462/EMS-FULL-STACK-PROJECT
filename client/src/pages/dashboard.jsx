@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { dummyAdminDashboardData, dummyEmployeeDashboardData } from "../assets/assets";
-import Loading from "../components/loading";
+import Loading from "../components/Loading";
 import EmployeeDashboard from "../components/EmployeeDashboard";
 import AdminDashboard from "../components/AdminDashboard";
 
