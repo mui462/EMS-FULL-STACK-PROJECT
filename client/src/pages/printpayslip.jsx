@@ -1,9 +1,9 @@
-const PrintPayslip = () => {
+const printPayslips = () => {
     return (
         <div>
-            Print Payslip
+            printPayslips
         </div>
     );
-};
+}
 
-export default PrintPayslip;
+export default printPayslips;
