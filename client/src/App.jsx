@@ -34,6 +34,7 @@ const App = () => {
           <Route path="/leave" element={<Leave />} />
           <Route path="/payslips" element={<Payslips />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/print-payslip" element={<PrintPayslips />} />
         </Route>
 
         <Route
