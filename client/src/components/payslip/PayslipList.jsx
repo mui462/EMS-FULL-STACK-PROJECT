@@ -65,10 +65,7 @@ const PayslipList = ({ payslips, isAdmin }) => {
                                         <button
                                             onClick={() =>
                                                 window.open(
-                                                    `/print/payslips/${
-                                                        payslip._id ||
-                                                        payslip.id
-                                                    }`,
+                                                    `/print/payslip/${payslip._id || payslip.id}`,
                                                     "_blank"
                                                 )
                                             }
