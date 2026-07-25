@@ -5,6 +5,8 @@ import multer from "multer";
 import connectDB from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import employeesRouter from "./routes/employeeRoutes.js";
+import profileRouter from "./routes/profileRoutes.js";
+import attendaceRouter from "./routes/attendanceRoutes.js";
 
 
 const app = express()
@@ -24,6 +26,8 @@ app.get("/", (req, res)=> res.send("Server is running"))
 
 app.use("/api/auth", authRouter)
 app.use("/api/employess", employeesRouter)
+app.use("/api/profile", profileRouter)
+app.use("/api/attendance", attendaceRouter)
 
 
 await connectDB()
