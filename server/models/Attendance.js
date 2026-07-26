@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 
-const userSchema = new mongoose.Schema({
+const attendanceSchema = new mongoose.Schema({
     employeeId: {type: mongoose.Schema.Types.ObjectId, ref: "Employee", required: true},
     date: {type: Date, required: true},
     checkIn: {type: Date, default: null},
@@ -13,13 +13,13 @@ const userSchema = new mongoose.Schema({
    
 }, {timestamps: true})
 
-attedanceSchema.index({employeeId: 1, date: 1,}, {unique: true})
+attendanceSchema.index({employeeId: 1, date: 1,}, {unique: true})
 
 
-const User = mongoose.models.User || mongoose.model("User", userSchema)
+const Attendance = mongoose.models.Attendance || mongoose.model("Attendance", attendanceSchema)
 
 
-export default User;
+export default Attendance;
 
 
 
