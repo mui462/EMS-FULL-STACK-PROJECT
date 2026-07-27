@@ -84,7 +84,7 @@ export const getLeaves = async (req, res) => {
             const leaves = await LeaveApplication.find({
                 employeeId: employee._id
             }).sort({ createdAt: -1});
-            returnres.json({
+            return res.json({
                 data: leaves,
                 employee:  {...employee, id: employee._id.toString()}
             })
