@@ -1,4 +1,4 @@
-import Router from "express";
+import { Router } from "express";
 import { protect, protectAdmin } from "../middleware/auth.js";
 import { createPayslip, getPayslipById, getPayslips } from "../controllers/payslipController.js";
 
