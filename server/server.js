@@ -32,7 +32,7 @@ app.use(multer().none())
 app.get("/", (req, res)=> res.send("Server is running"))
 
 app.use("/api/auth", authRouter)
-app.use("/api/employess", employeesRouter)
+app.use("/api/employees", employeesRouter)
 app.use("/api/profile", profileRouter)
 app.use("/api/attendance", attendaceRouter)
 app.use("/api/leave", leaveRouter)
@@ -44,5 +44,13 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 
 await connectDB()
 
-app.listen(PORT, ()=> console.log(`server running on port ${PORT}`))
+await connectDB();
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+export default app;
 
