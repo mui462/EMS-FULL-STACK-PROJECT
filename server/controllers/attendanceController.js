@@ -27,7 +27,7 @@ export const clockInOut = async (req, res) => {
         if (!existing) {
             const isLate = now.getHours() >= 9 && now.getMinutes() > 0;
             const attendance = await Attendance.create({
-                emplyeeId: employee._id,
+                employeeId: employee._id,
                 date: today,
                 checkIn: now,
                 status: isLate ? "LATE" : "PRESENT"

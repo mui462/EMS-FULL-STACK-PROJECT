@@ -10,26 +10,26 @@ export const inngest = new Inngest({ id: "EMS-FULL STACK PROJECT" });
 
 // Auto check out for employees
 const autoCheckOut = inngest.createFunction(
-  { id: "auto-check-out", triggers: [{event: "employee/check-out"}]  }, 
-  
-  async ({ event, step }) => {
-    const {employeeId, attendanceId} = event.data;
+    { id: "auto-check-out", triggers: [{ event: "employee/check-out" }] },
 
-    // wait for 9 hours
-    await step.sleepUntil("wait-for-the-9-hours", new Date(new Date().getTime() + 9 * 60 * 60 * 1000))
+    async ({ event, step }) => {
+        const { employeeId, attendanceId } = event.data;
 
-    //get attendance data
-    let attendance = await Attendance.findById(attendanceId)
+        // wait for 9 hours
+        await step.sleepUntil("wait-for-the-9-hours", new Date(new Date().getTime() + 9 * 60 * 60 * 1000))
 
-    if(!attendance?.checkOut){
-        // get employee data
-        const employee = await Employee.findById(employeeId)
+        //get attendance data
+        let attendance = await Attendance.findById(attendanceId)
 
-        // sent reminder email
-        await sendEmail({
-            to: employee.email,
-            subject: "Attendance Check-Out Remainder",
-            body: ` <div style="max-width: 600px;">
+        if (!attendance?.checkOut) {
+            // get employee data
+            const employee = await Employee.findById(employeeId)
+
+            // sent reminder email
+            await sendEmail({
+                to: employee.email,
+                subject: "Attendance Check-Out Remainder",
+                body: ` <div style="max-width: 600px;">
                     <h2>Hi ${employee.firstName}, 👋</h2>
                     <p style="font-size: 16px;">You have a check-in in ${employee.department} today:</p>
                     <p style="font-size: 18px; font-weight: bold; color: #007bff; margin: 8px 0;">${attendance?.checkIn?.toLocaleTimeString()}</p>
@@ -39,31 +39,31 @@ const autoCheckOut = inngest.createFunction(
                     <p style="font-size: 16px;">Best Regards,</p>
                     <p style="font-size: 16px;">EMS</p>
                 </div>   `
-         
 
-        })
 
-        // after 10 hours, mark attendance as checked out with status "LATE"
-        await step.sleepUntil("wait-for-the-1-hour", new Date(new Date().getTime() + 1 * 60 * 60 * 1000))
+            })
 
-        attendance = await Attendance.findById(attendanceId)
-        if(!attendance?.checkOut){
-            attendance.checkOut = new Date(new Date(attendance.checkIn).getTime() + 10 * 60 * 60 * 1000);
-            attendance.workingHours = 4;
-            attendance.daytype = "Half Day";
-            attendance.status = "LATE";
-            await attendance.save();
+            // after 10 hours, mark attendance as checked out with status "LATE"
+            await step.sleepUntil("wait-for-the-1-hour", new Date(new Date().getTime() + 1 * 60 * 60 * 1000))
+
+            attendance = await Attendance.findById(attendanceId)
+            if (!attendance?.checkOut) {
+                attendance.checkOut = new Date(new Date(attendance.checkIn).getTime() + 10 * 60 * 60 * 1000);
+                attendance.workingHours = 4;
+                attendance.daytype = "Half Day";
+                attendance.status = "LATE";
+                await attendance.save();
+            }
         }
-    }
-  },
+    },
 );
 
 
 // send email to admin, if admin doesn't take action on leave application with in 24 hours
 const leaveApplicationReminder = inngest.createFunction(
-  { id: "leave-application-reminder", triggers: [{event: "leave/pending"}]  }, 
-  
-    async ({event, step}) => {
+    { id: "leave-application-reminder", triggers: [{ event: "leave/pending" }] },
+
+    async ({ event, step }) => {
         const { leaveApplicationId } = event.data;
 
         //wait for 24 hours
@@ -75,7 +75,7 @@ const leaveApplicationReminder = inngest.createFunction(
             const employee = await Employee.findById(leaveApplication.employeeId)
 
             // send reminder email to admin to take action on leave application
-            await sendEmail ({
+            await sendEmail({
                 to: process.env.ADMIN_EMAIL,
                 subject: `Leave Application Reminder`,
                 body: `<div style="max-width: 600px;">
@@ -90,20 +90,30 @@ const leaveApplicationReminder = inngest.createFunction(
             })
         }
     }
-  
+
 );
 
 // cron: check attendance at 11:30 AM IST (06:00 UTC) and email absent employee
 const attendanceReminderCron = inngest.createFunction(
-  { id: "attendance-reminder-cron", triggers: [{cron: "TZ=Asia/Karachi 30 11 * * *"}]  }, 
-   // 06:00 UTC = 11:30 IST
+    { id: "attendance-reminder-cron", triggers: [{ cron: "TZ=Asia/Karachi 30 11 * * *" }] },
+    // 06:00 UTC = 11:30 IST
     async ({ step }) => {
         // Step 1: Get today's date range (IST)
-        const today = await step.run("get-today-date", ()=>{
-            const startPKT = new Date(new Date().toLocaleDateString("en-CA", {timeZone: "Asia/krachi"}) + "T00:00:00+05:00"); 
-            const endPKT = new Date(startPKT.getTime() + 24 * 60 * 60 * 1000 );
-            return {startPKT: startPKT.toISOString(), endPKT: endPKT.toISOString()} 
-        })
+        const today = await step.run("get-today-date", () => {
+            const startPKT = new Date(
+                new Date().toLocaleDateString("en-CA", {
+                    timeZone: "Asia/Karachi",
+                }) + "T00:00:00+05:00"
+            );
+
+            const endPKT = new Date(startPKT);
+            endPKT.setDate(endPKT.getDate() + 1);
+
+            return {
+                startPKT: startPKT.toISOString(),
+                endPKT: endPKT.toISOString(),
+            };
+        });
         // Step 2: Get All active, non deleted employees
 
         const activeEmployees = await step.run("get-active-employees", async () => {
@@ -111,12 +121,13 @@ const attendanceReminderCron = inngest.createFunction(
                 isDeleted: false,
                 employmentStatus: "ACTIVE",
             }).lean();
-            return employees.map((e)=>({_id: e._id.toString(),
-                 firstName: e.firstName,
-                 lastName: e.lastName,
-                 email: e.email,
-                 department: e.department
-                }))
+            return employees.map((e) => ({
+                _id: e._id.toString(),
+                firstName: e.firstName,
+                lastName: e.lastName,
+                email: e.email,
+                department: e.department
+            }))
         })
 
         // Step 3: Get employees IDs on approved leave today
@@ -126,23 +137,23 @@ const attendanceReminderCron = inngest.createFunction(
                 startDate: { $lte: new Date(today.endPKT) },
                 endDate: { $gte: new Date(today.startPKT) }
             }).lean();
-           return leaves.map((l) => l.employeeId.toString());
+            return leaves.map((l) => l.employeeId.toString());
         });
 
-         // Step 4: Get employees IDs on who already checked-in today
-         const checkedInIds = await step.run("get-checked-in-ids", async ()=>{
+        // Step 4: Get employees IDs on who already checked-in today
+        const checkedInIds = await step.run("get-checked-in-ids", async () => {
             const attendances = await Attendance.find({
-                date: { $gte: new Date(today.startPKT), $lt: new Date(today.endPKT)}
+                date: { $gte: new Date(today.startPKT), $lt: new Date(today.endPKT) }
             }).lean();
-            return attendances.map ((a)=> a.employeeId.toString())
-         })
-         // Step 5: filter absent employees 
-         const absentEmployees = activeEmployees.filter((emp)=> !onLeavesIDs.includes(emp._id) && !checkedInIds.includes(emp._id))
+            return attendances.map((a) => a.employeeId.toString())
+        })
+        // Step 5: filter absent employees 
+        const absentEmployees = activeEmployees.filter((emp) => !onLeavesIDs.includes(emp._id) && !checkedInIds.includes(emp._id))
 
-         // step 6: send reminder emails
-         if(absentEmployees.length > 0 ){
+        // step 6: send reminder emails
+        if (absentEmployees.length > 0) {
             await step.run("send-reminders-email", async () => {
-                const emailPromises = absentEmployees.map((emp)=>{
+                const emailPromises = absentEmployees.map((emp) => {
                     //send email
                     sendEmail({
                         to: emp.email,
@@ -161,11 +172,11 @@ const attendanceReminderCron = inngest.createFunction(
                     })
                 })
             })
-         }
+        }
 
-         return {totalActive: activeEmployees.length, onLeave: onLeavesIDs.length, checkedIn: checkedInIds.length, absent: absentEmployees.length}
+        return { totalActive: activeEmployees.length, onLeave: onLeavesIDs.length, checkedIn: checkedInIds.length, absent: absentEmployees.length }
     }
-  
+
 );
 
 // Create an empty array where we'll export future Inngest functions

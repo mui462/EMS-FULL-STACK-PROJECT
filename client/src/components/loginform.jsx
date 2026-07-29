@@ -1,8 +1,10 @@
 import React from "react";
 import { ArrowLeftIcon, EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginLeftSide from "./loginleftside";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 const LoginForm = ({ role, title, subtitle }) => {
 
@@ -11,32 +13,22 @@ const LoginForm = ({ role, title, subtitle }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const {login} = useAuth()
+    const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("")
+    setLoading(true)
     try {
-        setLoading(true);
-        setError("");
-
-        // TODO: Replace this with your authentication API call
-        const user = {
-            firstName: "John",
-            lastName: "Doe",
-            role: email === "admin@example.com" ? "ADMIN" : "EMPLOYEE",
-        };
-
-        // Save authenticated user
-        localStorage.setItem("user", JSON.stringify(user));
-
-        // Navigate after successful login
-        navigate("/dashboard");
-    } catch (err) {
-        setError("Invalid email or password.");
+        await login(email, password, role)
+        navigate("/dashboard")
+    } catch (error) {
+        toast.error(error.response?.data?.error || error.message || "Login Failed")
     } finally {
-        setLoading(false);
+        setLoading(false)
     }
-};
+  }
 
     return (
         <div className="min-h-screen flex flex-col md:flex-row">

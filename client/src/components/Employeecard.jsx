@@ -1,5 +1,7 @@
 import { PencilIcon, Trash2Icon } from "lucide-react";
 import React from "react";
+import api from "../api/axios";
+import toast from "react-hot-toast";
 
 
 const Employeecard = ({employee, onDelete, onEdit}) => {
@@ -8,6 +10,12 @@ const Employeecard = ({employee, onDelete, onEdit}) => {
         const handledelete = async ()=> {
             if (!confirm("Are You Sure You Want To Delete This Employee"))
                 return; 
+            try {
+                await api.delete(`/employees/${employee._id}`)
+                onDelete()
+            } catch (err) {
+                toast.error(err.response?.data?.error || err.message);
+            }
         }
 
 
@@ -28,9 +36,9 @@ const Employeecard = ({employee, onDelete, onEdit}) => {
 
                 </div>
 
-                    <div className="absolute top-3 left-3 flex-gap-2">
+                    <div className="absolute top-3 left-3 flex gap-2">
                         <span className="bg-white/90 background-blur-sm px-2.5 py-1 text-xs font-semibold text-slate-600 rounded-lg shadow-sm">{employee.department || "Remote"}</span>
-                        {employee.isdeleted && <span className="bg-red-500/60 font-medium text-white px-2.5 py-1 text-xs rounded">DELETED</span>}
+                        {employee.isDeleted && <span className="bg-red-500/60 font-medium text-white px-2.5 py-1 text-xs rounded">DELETED</span>}
 
                     </div>
 
