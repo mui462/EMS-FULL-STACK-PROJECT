@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { dummyProfileData } from "../assets/assets";
-import { Calendar1Icon, CalendarIcon, ChevronRightIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, LogOutIcon, MenuIcon, SettingsIcon, UserIcon, XIcon } from "lucide-react"
+import { Calendar1Icon, CalendarIcon, ChevronRightIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, Loader2, LogOutIcon, MenuIcon, SettingsIcon, UserIcon, XIcon } from "lucide-react"
+import { useAuth } from "../context/AuthContext.jsx";
+import api from "../api/axios.js";
 
 const Sidebar = () => {
 
@@ -9,10 +11,25 @@ const Sidebar = () => {
     const [username, setUsername] = useState("");
     const [mobileOpen, setMobileOpen] = useState(false)
 
+
+    const { user, loading, logout } = useAuth()
+
     useEffect(() => {
-        setUsername(
-            dummyProfileData.firstName + " " + dummyProfileData.lastName
-        );
+        const fetchProfile = async () => {
+            try {
+                const { data } = await api.get("/profile");
+
+                if (data.firstName) {
+                    setUsername(
+                        `${data.firstName} ${data.lastName || ""}`.trim()
+                    );
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchProfile();
     }, []);
 
 
@@ -22,7 +39,7 @@ const Sidebar = () => {
         setMobileOpen(false)
     }, [pathname])
 
-    const role = "" || "ADMIN"
+    const role = user?.role;
     const navItems = [
         { name: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
         role === "ADMIN" ?
@@ -33,9 +50,10 @@ const Sidebar = () => {
         { name: "Settings", href: "/settings", icon: SettingsIcon },
     ];
 
-        const handleLogout = ()=>{
-            window.location.href = "/login"
-        }
+    const handleLogout = () => {
+        logout()
+        window.location.href = "/login"
+    }
 
 
     const sidebarContent = (
@@ -95,44 +113,51 @@ const Sidebar = () => {
             </div>
             {/* Navigation List */}
             <div className="flex-1 px-3 space-y-1 overflow-y-auto">
-                {navItems.map((item) => {
-                    const isActive = pathname.startsWith(item.href);
+                {loading ? (
+                    <div className="px-3 py-3 flex items-center gap-2 text-slate-500">
+                        <Loader2 className="animate-spin w-4 h-4" />
+                        <span className="text-sm">Loading...</span>
+                    </div>
+                ) : (
+                    navItems.map((item) => {
+                        const isActive = pathname.startsWith(item.href);
 
-                    return (
-                        <Link
-                            key={item.name}
-                            to={item.href}
-                            className={`group relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
-                                ? "bg-indigo-600/15 text-white"
-                                : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                                }`}
-                        >
-                            {isActive && (
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-indigo-500" />
-                            )}
-
-                            <item.icon
-                                className={`w-[17px] h-[17px] ${isActive
-                                    ? "text-indigo-300"
-                                    : "text-slate-400 group-hover:text-white"
+                        return (
+                            <Link
+                                key={item.name}
+                                to={item.href}
+                                className={`group relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
+                                        ? "bg-indigo-600/15 text-white"
+                                        : "text-slate-400 hover:bg-slate-800 hover:text-white"
                                     }`}
-                            />
+                            >
+                                {isActive && (
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-indigo-500" />
+                                )}
 
-                            <span className="flex-1">{item.name}</span>
+                                <item.icon
+                                    className={`w-[17px] h-[17px] ${isActive
+                                            ? "text-indigo-300"
+                                            : "text-slate-400 group-hover:text-white"
+                                        }`}
+                                />
 
-                            {isActive && (
-                                <ChevronRightIcon className="w-4 h-4 text-indigo-300" />
-                            )}
-                        </Link>
-                    );
-                })}
+                                <span className="flex-1">{item.name}</span>
+
+                                {isActive && (
+                                    <ChevronRightIcon className="w-4 h-4 text-indigo-300" />
+                                )}
+                            </Link>
+                        );
+                    })
+                )}
             </div>
             {/* logout */}
             <div className="p-3 border-t border-white/6">
-            <button onClick={handleLogout} className="flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-[13px] font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/8 transition-all duration-150">
-                <LogOutIcon className="w-[17px] h-[17px]"/>
-                <span>Log out</span>
-            </button>
+                <button onClick={handleLogout} className="flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-[13px] font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/8 transition-all duration-150">
+                    <LogOutIcon className="w-[17px] h-[17px]" />
+                    <span>Log out</span>
+                </button>
 
             </div>
 
