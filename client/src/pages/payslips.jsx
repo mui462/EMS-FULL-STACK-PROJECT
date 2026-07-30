@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import PayslipList from "../components/payslip/PayslipList";
 import GeneratePaySlipForm from "../components/payslip/GeneratePaySlipForm";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../Context/authContext";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
