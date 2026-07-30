@@ -5,7 +5,7 @@ import LoginLanding from "./pages/loginlanding";
 import Layout from "./pages/layout";
 import Dashboard from "./pages/dashboard";
 import Employees from "./pages/Employees";
-import Attendance from "./pages/attendence";
+import Attendance from "./pages/Attendance";
 import Leave from "./pages/Leave";
 import Payslips from "./pages/payslips";
 import Settings from "./pages/settings";
