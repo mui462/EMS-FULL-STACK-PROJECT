@@ -6,10 +6,10 @@ import Layout from "./pages/layout";
 import Dashboard from "./pages/dashboard";
 import Employees from "./pages/Employees";
 import Attendance from "./pages/Attendance";
-import Leave from "./pages/Leave";
+import Leave from "./pages/leave";
 import Payslips from "./pages/payslips";
 import Settings from "./pages/settings";
-import PrintPayslips from "./pages/printpayslip";
+import PrintPayslips from "./pages/Printpayslip";
 import LoginForm from "./components/LoginForm";
 
 const App = () => {
