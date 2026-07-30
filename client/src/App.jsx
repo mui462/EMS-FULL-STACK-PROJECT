@@ -9,8 +9,8 @@ import Attendance from "./pages/Attendance";
 import Leave from "./pages/leave";
 import Payslips from "./pages/payslips";
 import Settings from "./pages/settings";
-import PrintPayslips from "./pages/Printpayslip";
-import LoginForm from "./components/LoginForm";
+import PrintPayslips from "./pages/printpayslip";
+import LoginForm from "./components/loginform";
 
 const App = () => {
   return (
