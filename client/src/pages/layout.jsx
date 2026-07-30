@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { useAuth } from "../Context/AuthContext.jsx";
+import { useAuth } from "../Context/authContext.jsx";
 import Loading from "../components/Loading.jsx";
 
 
