@@ -1,7 +1,7 @@
     import React from "react";
     import { ArrowLeftIcon, EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
     import { Link, useNavigate } from "react-router-dom";
-    import LoginLeftSide from "./loginleftside";
+    import LoginLeftSide from "./LoginLeftside.jsx";
     import { useState } from "react";
     import { useAuth } from "../context/AuthContext.jsx";
     import toast from "react-hot-toast";
