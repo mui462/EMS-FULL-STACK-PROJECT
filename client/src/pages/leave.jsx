@@ -4,7 +4,7 @@ import Loading from "../components/Loading";
 import { Icon, PalmtreeIcon, PlusIcon, ThermometerIcon, UmbrellaIcon } from "lucide-react";
 import LeaveHistory from "../components/leave/LeaveHistory";
 import ApplyLeaveModel from "../components/leave/ApplyLeaveModel";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
