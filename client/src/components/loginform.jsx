@@ -3,7 +3,7 @@
     import { Link, useNavigate } from "react-router-dom";
     import LoginLeftSide from "./loginleftside.jsx";
     import { useState } from "react";
-    import { useAuth } from "../Context/authContext.jsx";
+    import { useAuth } from "../Context/AuthContext.jsx";
     import toast from "react-hot-toast";
 
     const LoginForm = ({ role, title, subtitle }) => {
