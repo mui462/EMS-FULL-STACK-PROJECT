@@ -59,7 +59,7 @@ export const createEmployee = async (req, res) => {
         const user = await User.create({
             email,
             password: hashed,
-            role: role || "Employee"
+            role: role || "EMPLOYEE"
         })
 
         const employee = await Employee.create({
@@ -144,15 +144,30 @@ export const deleteEmployee = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const employee = await Employee.findById(id)
-        if (!employee) return res.status(404).json({error: "Employee not found"});
+        const employee = await Employee.findById(id);
 
-        employee.isDeleted = true;
-        employee.employmentStatus = "INACTIVE"
-        await employee.save()
-        return res.json({ success: true });
+        if (!employee) {
+            return res.status(404).json({
+                error: "Employee not found"
+            });
+        }
+
+        // User record delete
+        await User.findByIdAndDelete(employee.userId);
+
+        // Employee record delete
+        await Employee.findByIdAndDelete(id);
+
+        return res.json({
+            success: true,
+            message: "Employee deleted successfully"
+        });
 
     } catch (error) {
-        return res.status(500).json({error: "Failed to delete employee"})
+        console.error(error);
+
+        return res.status(500).json({
+            error: "Failed to delete employee"
+        });
     }
-}
+};
