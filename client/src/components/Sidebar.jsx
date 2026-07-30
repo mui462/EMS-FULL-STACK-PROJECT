@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { dummyProfileData } from "../assets/assets";
 import { Calendar1Icon, CalendarIcon, ChevronRightIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, Loader2, LogOutIcon, MenuIcon, SettingsIcon, UserIcon, XIcon } from "lucide-react"
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../Context/AuthContext.jsx";
 import api from "../api/axios.js";
 
 const Sidebar = () => {
